@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+font-family: 'Montserrat', sans-serif;
+/* font-family: 'Montserrat Alternates', sans-serif; */
+}
+
+h3 {
+  color: #753700;
+  font-weight: 700;
+}
+
+.listusers .listproducts {
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+.paginationNav {
+  flex-shrink: 0;
+}
+
