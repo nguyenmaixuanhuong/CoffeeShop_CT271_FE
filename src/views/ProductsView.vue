@@ -16,6 +16,7 @@ export default {
                     productAll[product.idproduct] = product;
                 })
                 this.products = productAll;
+                // console.log(this.products);
             });
 
         }
@@ -30,7 +31,7 @@ export default {
     <main>
         <div class="container">
             <div class="row">
-                <div class="col-md-2 col-lg-2 p-0 mt-5" style="border-right: 3px solid rgba(219, 219, 219, 0.484);" >
+                <div class="col-md-2 col-lg-2 p-0 mt-5" style="border-right: 3px solid rgba(219, 219, 219, 0.484);">
                     <ul class=" btn-menu" style="">
                         <h3 class="bg-info p-2 text-white text-center">MENU</h3>
                         <RouterLink to="/products" class="product-list text-info  ">Tất cả</RouterLink>
@@ -44,24 +45,26 @@ export default {
                         <!-- <h3 class="menu-title">Coffee</h3>  -->
                         <div class="menu-list d-flex flex-wrap ">
                             <div class="menu-item" v-for="product in products" v-bind:key="product.idproduct">
-                                <div class="menu-item-img" style="">
-                                    <RouterLink v-bind:to="'/product/' + product.idproduct">
-                                        <img v-bind:src= "'/img/products/'+product.productImage" alt="" style="width: 100%; border-radius: 10px;">
-                                    </RouterLink>
-                                </div>
+                                <RouterLink v-bind:to="'/product/' + product.idproduct" style="text-decoration: none;">
+                                    <div class="menu-item-img" style="">
+                                        <img v-bind:src="'/img/products/' + product.productImage" alt=""
+                                            style="width: 100%; border-radius: 10px;">
+                                    </div>
 
-                                <div class="menu-item-info text-center pt-3">
-                                    <RouterLink class="decoration-none" v-bind:to="'/product/' + product.idproduct">
+                                    <div class="menu-item-info text-center pt-3">
                                         <p class="font-weight-bold mb-0 ">
                                             {{ product.productName }}
                                         </p>
-                                    </RouterLink>
-                                       
-                                    <div class="product-item-price pb-2">
-                                        <p>{{ product.productPricesizeM }}đ</p>
+                                        <div class="product-item-price pb-2">
+                                            <p>{{
+                                                new Intl.NumberFormat()
+                                                    .format(product.productPricesizeM)
+                                                    .replaceAll(",", ".")
+                                            }}
+                                                đ</p>
+                                        </div>
                                     </div>
-                                </div>
-
+                                </RouterLink>
                             </div>
                         </div>
                     </div>
@@ -82,7 +85,8 @@ export default {
     color: rgb(147, 147, 147);
     display: block;
     font-size: 100%;
-    text-decoration: none !important;;
+    text-decoration: none !important;
+    ;
     padding-left: 30px;
 }
 
@@ -97,23 +101,26 @@ export default {
     margin-left: 24px;
     margin-bottom: 36px;
     border-radius: 10px;
-   
+
 }
-.menu-item:hover{
+
+.menu-item:hover {
     /* border: 1px solid rgb(197, 197, 197); */
     border-radius: 10px;
     box-shadow: 1px 1px 10px rgb(232, 232, 232);
     border-bottom: none;
 }
-.btn-menu{
+
+.btn-menu {
     position: sticky;
     position: -webkit-sticky;
     top: 0;
     line-height: 2;
     padding-left: 50px;
-   
+
 }
-.decoration-none{
+
+.decoration-none {
     text-decoration: none !important;
 }
 </style>

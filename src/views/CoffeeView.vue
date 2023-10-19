@@ -62,7 +62,12 @@ export default {
                                         </RouterLink>
                                            
                                         <div class="product-item-price pb-2">
-                                            <p>{{ product.productPricesizeM }}đ</p>
+                                            <p>{{
+                                            new Intl.NumberFormat()
+                                                .format(product.productPricesizeM)
+                                                .replaceAll(",", ".")
+                                        }}
+                                            đ</p>
                                         </div>
                                     </div>
                             </div>

@@ -5,5 +5,8 @@ export default{
     },
     getProduct(id){
         return API().get("/api/getproductAPI/"+id);
+    },
+    getCart(phone){
+        return API().get("/cart/getCart/"+phone);
     }
 }
