@@ -22,17 +22,21 @@ export default {
             }
         },
         async login() {
-            await userAPI.login(this.phone, this.password).then((res) => {
-                 cartAPI.getCart(this.phone).then((cart) => {
-                        sessionStorage.setItem("cart",cart.data[0].idcart);
+            await userAPI.login(this.phone, this.password).then( async (res) => {
+                await cartAPI.getCart(this.phone).then((cart) => {
+                        sessionStorage.setItem("cart",cart.data.id);
                 });
-                sessionStorage.setItem("username", res.data[0].username);
-                sessionStorage.setItem("phone", res.data[0].sdt);
+                sessionStorage.setItem("username", res.data.username);
+                sessionStorage.setItem("phone", res.data.phone);
                 window.location.replace('/');
             })
                 .catch((err) => {
                 this.error = err.response.data;
             });
+        },
+        reseterror(){
+            this.error = ""
+            this.message = ""
         }
     },
 }
@@ -45,7 +49,7 @@ export default {
             <div class="col-md-5 p-5 my-5"
                 style="background-color: rgba(212, 212, 212, 0.875); border-radius: 10px; min-height: 400px;">
                 <h3 class="mt-1 text-center text-uppercase " style="color: rgb(35, 98, 104);">Đăng nhập tài khoản</h3>
-                <form class="mt-5" method="post" @submit.prevent="login()">
+                <form class="mt-5" method="post" @submit.prevent="login()" @change="reseterror">
                     <div class="form-group mb-4">
                         <input type="text" class="form-control form-input " name="phone" id="phone" aria-describedby="phone"
                             placeholder="Nhập số điện thoại" v-model="phone" required>
@@ -79,7 +83,7 @@ export default {
 </template>
 
 
-<style>
+<style >
 .form-input {
     border-radius: 20px;
     padding: 12px 25px;

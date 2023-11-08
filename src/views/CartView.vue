@@ -1,7 +1,13 @@
 <script>
 import cartAPI from '../services/cartAPI';
+import orderAPI from '../services/orderAPI';
+import updateproductCart from '../components/updateproductCart.vue';
+import moment from 'moment';
 export default {
     name: "Cart",
+    components:{
+        updateproductCart,
+    },
     data() {
         return {
             products: [],
@@ -9,25 +15,52 @@ export default {
             username: sessionStorage.getItem("username"),
             phone: sessionStorage.getItem("phone"),
             address: "",
-            date: new Date().getDate() + "/" + new Date().getMonth() + "/" + new Date().getFullYear(),
+            date: moment().format('DD-MM-YYYY HH:mm:ss'),
+            error: "",
+            message: "",
         }
     },
     methods: {
-        getAllCartDetails() {
+        async getAllCartDetails() {
             const idcart = sessionStorage.getItem("cart");
-            cartAPI.getAllCartDetails(idcart).then(res => {
+            await cartAPI.getAllCartDetails(idcart).then(res => {     
                 this.products = res.data;
-
+                console.log(this.products);
             })
         },
         async deleteCartDetail(product) {
             await cartAPI.deleteCartDetail(product.idcart, product.idproduct, product.size).then(res => {
                 this.getAllCartDetails();
             });
+        },
+        async createOrder(){
+            const totalorder = this.getTotalPrice;
+            if( this.products.length == 0){
+                this.message = "Chưa có sản phẩm nào trong giỏ hàng của bạn";
+                alert(this.message);
+            }
+            else if(this.address == ""){
+                this.error = "Vui lòng nhập địa chỉ nhận hàng"
+             }
+            else {
+                await orderAPI.createOrder(this.phone,this.username, this.address,this.date,totalorder,0,this.products).then(res => {
+                        this.message = res.data;
+                        $("#successOrder").modal("show");
+                        this.getAllCartDetails();
+                })
+                .catch(err => {
+                    console.log(e);
+                });
+            }
+           
+        },
+        reseterror(){
+            this.error = '';
         }
+       
     },
     computed: {
-        getTotalPrice() {
+       getTotalPrice() {
             return this.products.reduce(
                 (total, product) => total + product.totalprice, 0
             );
@@ -44,101 +77,34 @@ export default {
     <div class="container">
         <div class="row p-5" >
             <div class="col-md-6" style="padding-right: 100px;">
-                <h5> Thông tin giao hàng</h5>
-                {{ date }}
+                <h5 class="text-center"> Thông tin giao hàng</h5>
+                <p class="text-center">{{ date }}</p>
                 <div>
                     <form>
                         <div class="form-group">
                             <label for="exampleInput1">Tên người nhận</label>
                             <input type="text" class="form-control" id="exampleInput1" aria-describedby="Help"
-                                placeholder="Nhập tên người nhận" v-model="username">
+                                placeholder="Nhập tên người nhận" disabled v-model="username">
                         </div>
                         <div class="form-group">
                             <label for="phone">Số điện thoại</label>
-                            <input type="text" class="form-control" id="phone" placeholder="Số điện thoại " v-model="phone">
+                            <input type="text" class="form-control" id="phone" disabled placeholder="Số điện thoại " v-model="phone">
                         </div>
                         <div class="form-group">
                             <label for="address">Địa chỉ nhận hàng</label>
-                            <input type="text" class="form-control" id="address" placeholder="Địa chỉ nhận hàng " v-model="address" required>
+                            <input type="text" class="form-control" id="address" placeholder="Địa chỉ nhận hàng" @change="reseterror" v-model="address" required>
                         </div>
-                       <p class="text-info">Vui lòng kiểm tra thông tin chính xác trước khi đặt hàng</p>
+                       <p class="text-danger font-weight-bold text-center">{{ error }}</p>
                     </form>
                 </div>
             </div>
             <div class="col-md-6 listCartDetails">
-                <div>
+                <div >
                     <h4>Các món đã chọn</h4>
-                    <div v-for="product in products " v-bind:key="product.idproduct" class="cartdetails">
+                    <div class="cartdetails" v-for="product in products " v-bind:key="product.idproduct">
                         <div class="d-flex">
-                            <div>
-                                <i class="fa-solid fa-pen mr-3" style="padding-top: 30px; color: rgb(35, 126, 138);"
-                                    data-toggle="modal" data-target="#exampleModal"></i>
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Cập nhật sản phẩm</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="d-flex justify-content-between">
-                                                    <div>
-                                                        <img v-bind:src="'/img/products/' + product.productImage" alt=""
-                                                            style="width: 150px; border-radius: 10px;">
-                                                    </div>
-                                                    <div>
-                                                        <span class="font-weight-bold">{{ product.productName }}</span>
-                                                        <p style="text-align: justify; font-size: 14px;">{{
-                                                            product.description }}</p>
-                                                        <div class="d-flex justify-content-between">
-                                                            <h5 class="font-weight-bold">{{ new Intl.NumberFormat()
-                                                                .format(product.totalprice)
-                                                                .replaceAll(",", ".")
-                                                            }}đ</h5>
-                                                            <div class="buttons_added">
-                                                                <input class="minus is-form  font-weight-bold" type="button"
-                                                                    value="-">
-                                                                <input aria-label="quantity"
-                                                                    class="input-qty text-center py-1 font-weight-bold"
-                                                                    style="width: 50px; border: none;" min="1"
-                                                                    name="numberProduct" type="number">
-                                                                <input class="plus is-form  font-weight-bold" type="button"
-                                                                    value="+">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="text-info-product  mb-1">Ghi Chú</p>
-                                                    <div>
-                                                        <textarea name="note" class="form-control form-input"
-                                                            id="exampleFormControlTextarea1" rows="1"
-                                                            v-model="note"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex mt-3">
-                                                    <p class="font-weight-bold">Chọn size: </p>
-                                                    <div class="ml-5">
-                                                        <button
-                                                            class="btn btn-outline-info font-weight-bold px-2 py-1 mr-5 active"
-                                                            id="btn-sizeM">size M</button>
-                                                        <button class="btn btn-outline-info font-weight-bold px-2 py-1"
-                                                            id="btn-sizeL">size
-                                                            L</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="button" class="btn btn-info m-3 p-2">Thay đổi giỏ hàng</button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
+                                <updateproductCart :product="product"></updateproductCart>
+                            <div class="ml-3">
                                 <p class="p-0 font-weight-bold">{{ product.number }} x {{ product.productName }} (size {{
                                     product.size }})</p>
                                 <p class="m-0"> Ghi chú: {{ product.note }}</p>
@@ -147,6 +113,7 @@ export default {
                         <div>
                             <a><i class="fa-solid fa-xmark float-right text-danger" @click="deleteCartDetail(product)"
                                     style="font-size: 20px;"></i></a>
+                            
                             <p class="font-weight-bold mt-5">{{ new Intl.NumberFormat()
                                 .format(product.totalprice)
                                 .replaceAll(",", ".")
@@ -162,7 +129,31 @@ export default {
                         }}đ</p>
                     </div>
                     <div class="order">
-                        <button type="button" class="btn btn-info mb-3 p-2 w-100 ">Đặt hàng</button>
+                        <button type="button" class="btn btn-info mb-3 p-2 w-100 " @click="createOrder">Đặt hàng</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal" id="successOrder" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" @click="getAllCartDetails" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img style="width: 100px; " src="/image/logo/success.png" alt="">
+                        <p class="h5 mt-3">Bạn đã đặt hàng thành công</p>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <RouterLink to="cart">
+                            <button type="button" data-dismiss="modal" class="btn btn-danger">Tiếp tục mua hàng </button>
+                        </RouterLink>
+                        <RouterLink  to="/orders">
+                            <button type="button" data-dismiss="modal" class="btn btn-success">Xem chi tiết đơn hàng </button>
+                        </RouterLink>
                     </div>
                 </div>
             </div>

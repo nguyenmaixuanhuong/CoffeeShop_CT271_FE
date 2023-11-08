@@ -35,12 +35,17 @@ export default {
           await userAPI.register(this.name,this.phone, this.password).then( res =>{
                 this.status = 200
                 this.messageSuccess = res.data
+                alert(this.messageSuccess);
+                this.$router.push('/login')
                 
             }).catch(err=>{
                 this.status = 400
                 this.message= err.response.data;    
-                console.log(this.message, this.status);        
             })
+        },
+        reseterror(){
+            this.messageSuccess = ""
+            this.message = ""
         }
 
     }
@@ -54,7 +59,7 @@ export default {
         <div class="row justify-content-center">
             <div class="col-md-5 p-5 my-4" style="background-color: rgba(212, 212, 212, 0.821); border-radius: 10px;">
                 <h3 class=" text-center text-uppercase" style="color: rgb(35, 98, 104);">Đăng kí tài khoản</h3>
-                <form class=" mt-2 px-3 " method="post" @submit.prevent="register()">
+                <form class=" mt-2 px-3 " method="post" @submit.prevent="register()" @change="reseterror">
                     <div class="form-group">
                         <label for="name">Tên của bạn:</label>
                         <input type="text" class="form-control form-input " name="name" id="name" aria-describedby="name"

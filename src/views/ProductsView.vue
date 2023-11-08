@@ -1,28 +1,55 @@
 <script >
 import { RouterLink } from 'vue-router';
 import productAPI from '../services/productAPI';
+import search from "../components/search.vue"
 export default {
+    components:{
+        search,
+    },
     name: "Products",
     data() {
         return {
-            products: []
+            products: [],
+            type: 0,
+            textSearch: "",
+            productSearch:[],
         }
     },
-    methods: {
-        getAllProducts() {
-            const productAll = {};
-            productAPI.getlistProducts().then(res => {
-                res.data.map(product => {
-                    productAll[product.idproduct] = product;
+    computed:{
+        searchProducts() {
+            const name = this.textSearch.toLowerCase().trim()
+            if (!name) return this.products;
+            else {
+                productAPI.getlistProducts().then((res) => {
+                    this.productSearch = res.data;
                 })
-                this.products = productAll;
-                // console.log(this.products);
-            });
+                return this.productSearch.filter((product) => {
+                    return product.productName.toLowerCase().includes(name)
+                })
+            }
+        },
+    },
+    methods: {
+        getAllProducts(type) {
+            productAPI.getlistProducts().then(res => {
+                if (type != 0) {
+                    this.products = res.data.filter(product => {
+                        if (product.idtype == type) return product;
+                    })
 
+                }
+                else {
+                    this.products = res.data
+                }
+                document.getElementById(this.type).classList.remove('active');
+                document.getElementById(type).classList.add('active');
+                this.type = type;
+            });
+            window.scrollTo(0, 0);
         }
     },
     created() {
-        this.getAllProducts();
+        this.getAllProducts(0);
     }
 }
 </script>
@@ -34,17 +61,17 @@ export default {
                 <div class="col-md-2 col-lg-2 p-0 mt-5" style="border-right: 3px solid rgba(219, 219, 219, 0.484);">
                     <ul class=" btn-menu" style="">
                         <h3 class="bg-info p-2 text-white text-center">MENU</h3>
-                        <RouterLink to="/products" class="product-list text-info  ">Tất cả</RouterLink>
-                        <RouterLink to="/coffee" class="product-list">Cà Phê</RouterLink>
-                        <RouterLink to="/tea" class="product-list">Trà</RouterLink>
-                        <RouterLink to="/freeze" class="product-list">Đá Xay</RouterLink>
+                        <p id="0" @click="getAllProducts(0)" class="product-list text-info active ">Tất cả</p>
+                        <p id="1" @click="getAllProducts(1)" class="product-list">Cà Phê</p>
+                        <p id="2" @click="getAllProducts(2)" class="product-list">Đá Xay</p>
+                        <p id="3" @click="getAllProducts(3)" class="product-list">Trà</p>
                     </ul>
                 </div>
                 <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12 pt-3">
                     <div class="menu p-3">
-                        <!-- <h3 class="menu-title">Coffee</h3>  -->
+                        <search v-model="textSearch"></search>
                         <div class="menu-list d-flex flex-wrap ">
-                            <div class="menu-item" v-for="product in products" v-bind:key="product.idproduct">
+                            <div class="menu-item" v-for="product in searchProducts" v-bind:key="product.idproduct">
                                 <RouterLink v-bind:to="'/product/' + product.idproduct" style="text-decoration: none;">
                                     <div class="menu-item-img" style="">
                                         <img v-bind:src="'/img/products/' + product.productImage" alt=""
@@ -122,5 +149,9 @@ export default {
 
 .decoration-none {
     text-decoration: none !important;
+}
+
+.active {
+    color: brown;
 }
 </style>

@@ -3,7 +3,7 @@
         <div class="row mt-3 mb-5">
             <div class="contact col-md-6">
                 <h1 class="pt-4 font-weight-bold mb-4 text-center" style="color: rgb(22, 103, 113); border-bottom: 2px solid;">Liên hệ với chúng tôi</h1>
-                <p style="text-align: justify;line-height: 2;">Chúng tôi đánh giá cao phản hồi, câu hỏi và đề xuất của bạn. Tại Beans Cafe,
+                <p style="text-align: justify;line-height: 2;">Chúng tôi đánh giá cao phản hồi, câu hỏi và đề xuất của bạn. Tại Trạm Cafe,
                     chúng tôi cố gắng cung
                     cấp dịch vụ khách hàng đặc biệt và đảm bảo trải nghiệm của bạn với chúng tôi không có gì tuyệt vời.
                     Cho dù bạn có thắc mắc về thực đơn của chúng tôi, cần hỗ trợ đặt hàng hay chỉ muốn chia sẻ suy nghĩ

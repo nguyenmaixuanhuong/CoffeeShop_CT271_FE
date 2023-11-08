@@ -35,15 +35,24 @@
         </div>
       </nav>
       <div class="col-md-2 d-flex pt-3 ">
-        <RouterLink to="/cart" class="fa-solid fa-bag-shopping  cart "  style="font-size: 20px;"></RouterLink>
-        <span class=" px-1 mt-2 ">|</span>
         <div style=" float: right; " class="align-middle d-flex mr-3 mt-1">
           <div v-if="username != null" class="d-flex">
-            <p class="font-weight-bold pt-1">{{ username }}</p>          
-              <i class="fa-solid fa-right-from-bracket pt-2 pl-2" data-toggle="tooltip" data-placement="top" title="Đăng xuất" @click="logout"></i>
+        <RouterLink to="/cart" class="fa-solid fa-bag-shopping  cart mr-3 " style="font-size: 20px;"></RouterLink>
+            <div class="btn-group">
+              <a type="button" class=" dropdown-toggle font-weight-bold pt-1" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fa-solid fa-user ml-2" style="font-size: 20px; color: rgb(0, 82, 91);"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-left " style="width: 20px; background-color:rgb(0, 82, 91); ">
+                <RouterLink to="/orders" style="text-decoration: none;">
+                  <button class="dropdown-item py-3 font-weight-bold text-white"  type="button">Xem Đơn Hàng</button>
+                </RouterLink>
+                <button class="dropdown-item py-3 font-weight-bold text-white"  @click="logout" type="button">Đăng Xuất</button>
+              </div>
+            </div>
           </div>
           <div v-else class="pt-1 pl-0">
-            <RouterLink to="/register" class=" btn-account p-1" >Đăng ký |</RouterLink>
+            <RouterLink to="/register" class=" btn-account p-1">Đăng ký |</RouterLink>
             <RouterLink to="/login" class=" btn-account p-1">Đăng nhập</RouterLink>
           </div>
         </div>
@@ -57,7 +66,7 @@
 }
 
 .cart {
-  padding-top: 10px;
+  padding-top: 5px;
   color: #3d6874;
 }
 
@@ -120,6 +129,10 @@ a {
   border-radius: 20px;
   width: 10em;
 }
+.dropdown-item:hover{
+  color: #3d6874 !important;
+  background-color: white !important;
+}
 </style>
 <script>
 export default {
@@ -129,10 +142,11 @@ export default {
       username: sessionStorage.getItem("username"),
     }
   },
-  methods:{
-    logout(){
+  methods: {
+    logout() {
       sessionStorage.clear();
       this.username = sessionStorage.getItem("username");
+      this.$router.push("/login")
     }
   }
 }

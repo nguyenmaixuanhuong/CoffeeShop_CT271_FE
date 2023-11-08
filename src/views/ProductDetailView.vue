@@ -113,7 +113,7 @@ export default {
             <div class="buttons_added">
               <input class="minus is-form py-2 px-3 font-weight-bold" type="button" value="-" @click="minusNumber">
               <input aria-label="quantity" class="input-qty text-center py-2 font-weight-bold" style="width: 50px; border: none;"
-                min="1" name="numberProduct" type="number" v-model="number">
+                min="1" name="numberProduct" type="number" v-model="number" disabled>
               <input class="plus is-form py-2 px-3 font-weight-bold" type="button" value="+" @click="plusNumber">
             </div>
           </div>

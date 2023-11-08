@@ -17,7 +17,6 @@ export default {
 }
 </script>
 <template>
-  <TheHeader/>
   <main style="background-color: rgb(255, 244, 230); padding-bottom: 50px;">
     <div id="demo" class="carousel slide" data-ride="carousel">
       <!-- Indicators -->
@@ -61,10 +60,10 @@ export default {
                 TRẠM Coffee tự tay chọn lọc và rang chỉ những hạt cà phê Arabica thơm ngon nhất
                 và những hạt cà phê Robusta đậm đà cho cách pha trộn đặc trưng của chúng tôi.
               </p>
-              <RouterLink to="/coffee" class="btn btn-outline-info btnBanner" style="bottom: 0px; left: 10px;">DISCOVER MORE</RouterLink>
+              <RouterLink to="/products" class="btn btn-outline-info btnBanner" style="bottom: 0px; left: 10px;">DISCOVER MORE</RouterLink>
             </div>
             <div>
-              <RouterLink to="/coffee"><img class="float-right" src="/img/productsInfor/coffee.png"
+              <RouterLink to="/products"><img class="float-right" src="/img/productsInfor/coffee.png"
                 style="width: 40%;  position: absolute; bottom: 0px; right: 0;" alt=""></RouterLink>
             </div>
           </div>
@@ -81,10 +80,10 @@ export default {
                   béo của sữa.
                   Đảm bảo là một thức uống yêu thích của nhiều khách hàng .
                 </p>
-                <RouterLink to="/freeze" class="btn btn-outline-info btnBanner">DISCOVER MORE</RouterLink>
+                <RouterLink to="/products" class="btn btn-outline-info btnBanner">DISCOVER MORE</RouterLink>
               </div>
             <div class="align-self-end ">
-              <RouterLink to="/freeze"><img class="float-left" src="/img/productsInfor/milktea.png"
+              <RouterLink to="/products"><img class="float-left" src="/img/productsInfor/milktea.png"
                   style="width: 40%; position: absolute; bottom: -20px; left: 0;" alt=""></RouterLink>
             </div>
           </div>
@@ -102,10 +101,10 @@ export default {
                 thơm ngon,
                 hiện đại bao gồm trái cây tự nhiên và lớp phủ bên trên. Ăn kèm hoặc không kèm sữa.
               </p>
-              <RouterLink to="/tea" class=" btnBanner btn btn-outline-info">DISCOVER MORE</RouterLink>
+              <RouterLink to="/products" class=" btnBanner btn btn-outline-info">DISCOVER MORE</RouterLink>
             </div>
             <div class="align-self-end ">
-              <RouterLink to="/tea"><img class="float-right" src="/img/productsInfor/tea.png"
+              <RouterLink to="/products"><img class="float-right" src="/img/productsInfor/tea.png"
                   style="width: 35%; position: absolute; bottom: 0px; right: 0;" alt=""></RouterLink>
             </div>
           </div>
@@ -134,21 +133,18 @@ export default {
               <p style="font-size: 20px;">7am - 11pm</p>
               <p class="font-weight-bold text-muted" style="font-size: 20px;">Thứ 7 - CN hàng tuần</p>
               <p style="font-size: 20px;">9am - 12pm</p>
-              <div class="border-top border-light">
-                <p class="pt-3 text-muted" style="font-size: 20px;">Liên hệ</p>
-                <h2 class="text-danger">0795924466</h2>
-              </div>
             </div>
           </div>
           <div class="col-md-7 order-table">
             <img style="width: 90%; padding: 40px ; border-radius: 50px;" src="/img/shop_space/space5.jpg" alt="">
-            <a href="/order-table" class="btn btn-info py-2" style="position: absolute; bottom: 70px; left: 100px;">Đặt
-              bàn ngay</a>
+            <RouterLink to="/service">
+              <a class="btn btn-info py-2 text-white" style="position: absolute; bottom: 70px; left: 100px;">Đặt
+                bàn ngay</a>
+            </RouterLink>
           </div>
         </div>
     </div>
   </main>
-  <TheFooter />
 </template>
 
 <style>

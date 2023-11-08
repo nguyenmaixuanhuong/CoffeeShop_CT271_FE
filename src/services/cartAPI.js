@@ -11,5 +11,8 @@ export default{
     },
     deleteCartDetail(idcart,idproduct,size){
         return API().delete("/cart/deleteCartDetail",{params:{idcart:idcart,idproduct:idproduct,size:size}} )
+    },
+    updateCartDetails(cartdetails){
+        return API().put("/cart/updateCartDetails",cartdetails);
     }
 }
