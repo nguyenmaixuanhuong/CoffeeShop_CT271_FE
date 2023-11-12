@@ -69,6 +69,7 @@ export default {
                 </div>
                 <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12 pt-3">
                     <div class="menu p-3">
+                        <h1 class="pt-4 font-weight-bold mb-4 text-center" style="color: rgb(22, 103, 113); ">DANH SÁCH SẢN PHẨM</h1>
                         <search v-model="textSearch"></search>
                         <div class="menu-list d-flex flex-wrap ">
                             <div class="menu-item" v-for="product in searchProducts" v-bind:key="product.idproduct">

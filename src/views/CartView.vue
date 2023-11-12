@@ -18,6 +18,7 @@ export default {
             date: moment().format('DD-MM-YYYY HH:mm:ss'),
             error: "",
             message: "",
+            length: 0,
         }
     },
     methods: {
@@ -25,7 +26,7 @@ export default {
             const idcart = sessionStorage.getItem("cart");
             await cartAPI.getAllCartDetails(idcart).then(res => {     
                 this.products = res.data;
-                console.log(this.products);
+                this.length = res.data.length;
             })
         },
         async deleteCartDetail(product) {
@@ -46,7 +47,8 @@ export default {
                 await orderAPI.createOrder(this.phone,this.username, this.address,this.date,totalorder,0,this.products).then(res => {
                         this.message = res.data;
                         $("#successOrder").modal("show");
-                        this.getAllCartDetails();
+                        setTimeout(this.getAllCartDetails(),3000)
+                        
                 })
                 .catch(err => {
                     console.log(e);
@@ -76,7 +78,7 @@ export default {
 <template>
     <div class="container">
         <div class="row p-5" >
-            <div class="col-md-6" style="padding-right: 100px;">
+            <div class="col-md-6"  style="padding-right: 100px;">
                 <h5 class="text-center"> Thông tin giao hàng</h5>
                 <p class="text-center">{{ date }}</p>
                 <div>
@@ -101,7 +103,11 @@ export default {
             <div class="col-md-6 listCartDetails">
                 <div >
                     <h4>Các món đã chọn</h4>
-                    <div class="cartdetails" v-for="product in products " v-bind:key="product.idproduct">
+                    <div class="text-center p-3" v-if="length < 1">
+                        <img  src="/img/logo/emptycart.svg" alt="">
+                        <p class="mt-3">Chưa có sản phẩm nào trong giỏ hàng của bạn</p>
+                    </div>
+                    <div v-else class="cartdetails" v-for="product in products " v-bind:key="product.idproduct">
                         <div class="d-flex">
                                 <updateproductCart :product="product"></updateproductCart>
                             <div class="ml-3">
@@ -148,7 +154,7 @@ export default {
                         <p class="h5 mt-3">Bạn đã đặt hàng thành công</p>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <RouterLink to="cart">
+                        <RouterLink to="/products">
                             <button type="button" data-dismiss="modal" class="btn btn-danger">Tiếp tục mua hàng </button>
                         </RouterLink>
                         <RouterLink  to="/orders">

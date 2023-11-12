@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <div class="row my-5" style="background-color: rgba(249, 249, 249, 0.852); border-radius: 10px;">
+      <h1 class="text-center pt-4 font-weight-bold "  style="color: rgb(22, 103, 113);">DỊCH VỤ ĐẶT BÀN</h1>
+        <div class="row my-4" style="background-color: rgba(249, 249, 249, 0.852); border-radius: 10px;">
           <div class="col-md-5 align-self-center text-center ">
             <h1 class="text-center pb-4 text-info">Giờ Mở Cửa</h1>
             <div class=" text-muted">
